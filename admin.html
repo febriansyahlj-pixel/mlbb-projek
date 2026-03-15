@@ -1,116 +1,195 @@
-<!DOCTYPE html><html>
-<head><title>Admin Panel</title>
-<meta name="viewport" content="width=device-width, initial-scale=1"><link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono&display=swap" rel="stylesheet"><style>
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<title>Admin Panel MLBB</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono&display=swap" rel="stylesheet">
+
+<style>
 
 body{
 margin:0;
 font-family:'JetBrains Mono',monospace;
-background:#020617;
 color:white;
 text-align:center;
+background:linear-gradient(-45deg,#020617,#0f172a,#020617,#1e293b);
+background-size:400% 400%;
+animation:bg 12s infinite;
+}
+
+@keyframes bg{
+0%{background-position:0% 50%;}
+50%{background-position:100% 50%;}
+100%{background-position:0% 50%;}
 }
 
 .header{
-padding:20px;
-font-size:22px;
 background:#020617;
-}
-
-.container{
-width:90%;
-max-width:500px;
-margin:25px auto;
+padding:18px;
+font-size:22px;
+font-weight:bold;
 }
 
 .order{
 background:#1e293b;
+margin:10px 20px;
 padding:15px;
 border-radius:12px;
-margin-bottom:15px;
 text-align:left;
 }
 
-.order p{
-margin:6px 0;
-font-size:13px;
-}
-
-.status{
-font-weight:bold;
-color:#22c55e;
-}
-
 .btn{
-margin-top:8px;
-margin-right:5px;
-padding:6px 12px;
+padding:8px 12px;
 border:none;
-border-radius:6px;
-font-family:'JetBrains Mono',monospace;
+border-radius:8px;
 cursor:pointer;
+font-family:'JetBrains Mono',monospace;
+margin-right:5px;
 }
 
 .pending{
 background:#facc15;
+color:black;
 }
 
 .proses{
-background:#38bdf8;
+background:#3b82f6;
+color:white;
 }
 
 .selesai{
 background:#22c55e;
+color:white;
 }
 
-</style></head><body><div class="header">
+input{
+padding:10px;
+border-radius:8px;
+border:none;
+}
+
+button{
+padding:10px 20px;
+border:none;
+border-radius:8px;
+background:#2563eb;
+color:white;
+cursor:pointer;
+font-family:'JetBrains Mono',monospace;
+}
+
+</style>
+
+</head>
+
+<body>
+
+
+<div id="loginBox" style="margin-top:100px">
+
+<h2>Login Admin</h2>
+
+<input id="password" type="password" placeholder="Masukkan Password">
+
+<br><br>
+
+<button onclick="login()">
+Login
+</button>
+
+</div>
+
+
+<div id="panel" style="display:none">
+
+<div class="header">
 ADMIN PANEL
-</div><div class="container" id="orders">
-Loading orders...
-</div><script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script><script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script><script>
+</div>
+
+<div id="orders"></div>
+
+</div>
+
+
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+
+
+<script>
 
 const firebaseConfig = {
-  apiKey: "AIzaSyBv3hvK1D8Nh9EIA8fdKQuLKtQuiCwehTM",
-  authDomain: "mlbb-project-f280f.firebaseapp.com",
-  projectId: "mlbb-project-f280f",
-  storageBucket: "mlbb-project-f280f.firebasestorage.app",
-  messagingSenderId: "505986844749",
-  appId: "1:505986844749:web:c7aebe40556642a9b5f404"
-};
+apiKey: "AIzaSyBv3hvK1D8Nh9EIA8fdKQuLKtQuiCwehTM",
+authDomain: "mlbb-project-f280f.firebaseapp.com",
+projectId: "mlbb-project-f280f",
+storageBucket: "mlbb-project-f280f.firebasestorage.app",
+messagingSenderId: "505986844749",
+appId: "1:505986844749:web:c7aebe40556642a9b5f404"
+}
 
-firebase.initializeApp(firebaseConfig);
-const db = firebase.firestore();
+firebase.initializeApp(firebaseConfig)
+
+const db = firebase.firestore()
+
+
+function login(){
+
+let pass=document.getElementById("password").value
+
+if(pass==="123aja11"){
+
+document.getElementById("loginBox").style.display="none"
+document.getElementById("panel").style.display="block"
+
+loadOrders()
+
+}else{
+
+alert("Password salah")
+
+}
+
+}
+
 
 function loadOrders(){
 
 db.collection("orders")
 .orderBy("waktu","desc")
-.onSnapshot(snapshot=>{
+.onSnapshot((snap)=>{
 
-let html="";
+let html=""
 
-snapshot.forEach(doc=>{
+snap.forEach(doc=>{
 
-let o=doc.data();
+let d=doc.data()
 
 html+=`
 
 <div class="order">
 
-<p><b>Order :</b> ${o.order}</p>
+<b>Order :</b> ${d.order}<br>
+<b>Region :</b> ${d.region}<br>
+<b>ID :</b> ${d.id} (${d.server})<br>
+<b>Diamond :</b> ${d.diamond}<br>
+<b>Harga :</b> ${d.harga}<br>
+<b>Status :</b> ${d.status}<br><br>
 
-<p><b>ID :</b> ${o.id} (${o.server})</p>
+<button class="btn pending" onclick="updateStatus('${d.order}','PENDING')">
+Pending
+</button>
 
-<p><b>Diamond :</b> ${o.diamond}</p>
+<button class="btn proses" onclick="updateStatus('${d.order}','PROSES')">
+Proses
+</button>
 
-<p><b>Harga :</b> Rp ${o.harga}</p>
-
-<p><b>Status :</b> <span class="status">${o.status}</span></p>
-
-<button class="btn pending" onclick="updateStatus('${o.order}','PENDING')">Pending</button>
-
-<button class="btn proses" onclick="updateStatus('${o.order}','PROSES')">Proses</button>
-
-<button class="btn selesai" onclick="updateStatus('${o.order}','SELESAI')">Selesai</button>
+<button class="btn selesai" onclick="updateStatus('${d.order}','SELESAI')">
+Selesai
+</button>
 
 </div>
 
@@ -124,9 +203,12 @@ document.getElementById("orders").innerHTML=html
 
 }
 
+
 function updateStatus(order,status){
 
-db.collection("orders").doc(order).update({
+db.collection("orders")
+.doc(order)
+.update({
 
 status:status
 
@@ -134,7 +216,7 @@ status:status
 
 }
 
-loadOrders()
+</script>
 
-</script></body>
+</body>
 </html>
