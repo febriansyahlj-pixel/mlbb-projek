@@ -304,6 +304,28 @@ waktu:new Date()
 
 .then(()=>{
 
+/* NOTIF TELEGRAM */
+
+let pesan=`🔔 ORDER BARU
+
+Order : ${order}
+Region : ${region}
+ID : ${id} (${server})
+Diamond : ${diamond}
+Harga : ${harga}
+Status : PENDING`
+
+fetch("https://api.telegram.org/bot8715240228:AAFf6DsDe3Njd71FZXkmmZGgVEGe1VFSMTA/sendMessage",{
+method:"POST",
+headers:{
+"Content-Type":"application/json"
+},
+body:JSON.stringify({
+chat_id:"679827061",
+text:pesan
+})
+})
+
 window.location.href="order.html?order="+order
 
 })
