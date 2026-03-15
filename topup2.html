@@ -3,6 +3,7 @@
 <head>
 <title>Top Up MLBB Brazil</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
+
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono&display=swap" rel="stylesheet">
 
 <style>
@@ -15,6 +16,12 @@ text-align:center;
 background:linear-gradient(-45deg,#020617,#0f172a,#020617,#1e293b);
 background-size:400% 400%;
 animation:bg 12s infinite;
+}
+
+@keyframes bg{
+0%{background-position:0% 50%;}
+50%{background-position:100% 50%;}
+100%{background-position:0% 50%;}
 }
 
 .header{
@@ -278,6 +285,28 @@ waktu:new Date()
 })
 
 .then(()=>{
+
+/* NOTIF TELEGRAM */
+
+let pesan=`🔔 ORDER BARU
+
+Order : ${order}
+Region : ${region}
+ID : ${id} (${server})
+Diamond : ${diamond}
+Harga : ${harga}
+Status : PENDING`
+
+fetch("https://api.telegram.org/bot8715240228:AAFf6DsDe3Njd71FZXkmmZGgVEGe1VFSMTA/sendMessage",{
+method:"POST",
+headers:{
+"Content-Type":"application/json"
+},
+body:JSON.stringify({
+chat_id:"679827061",
+text:pesan
+})
+})
 
 window.location.href="order.html?order="+order
 
