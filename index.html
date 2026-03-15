@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>EFDESU MLBB</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono&display=swap" rel="stylesheet">
+
+<style>
+
+body{
+margin:0;
+font-family:'JetBrains Mono',monospace;
+color:white;
+text-align:center;
+
+background:linear-gradient(-45deg,#020617,#0f172a,#020617,#1e293b);
+background-size:400% 400%;
+animation:bg 12s infinite;
+}
+
+@keyframes bg{
+0%{background-position:0% 50%;}
+50%{background-position:100% 50%;}
+100%{background-position:0% 50%;}
+}
+
+.header{
+background:#020617;
+padding:20px;
+}
+
+.title{
+font-size:28px;
+font-weight:bold;
+}
+
+.tagline{
+opacity:0.7;
+margin-top:5px;
+}
+
+.banner{
+width:90%;
+border-radius:15px;
+margin-top:20px;
+}
+
+.status{
+display:flex;
+justify-content:space-around;
+margin-top:15px;
+font-size:14px;
+}
+
+.menu{
+display:grid;
+grid-template-columns:repeat(2,1fr);
+gap:15px;
+padding:20px;
+}
+
+.menu button{
+padding:25px;
+border:none;
+border-radius:15px;
+background:#1e293b;
+color:white;
+font-family:'JetBrains Mono',monospace;
+font-size:16px;
+cursor:pointer;
+transition:0.25s;
+}
+
+.menu button:active{
+transform:scale(0.95);
+}
+
+.smallmenu{
+display:flex;
+justify-content:center;
+gap:10px;
+margin-top:10px;
+}
+
+.smallmenu button{
+padding:12px 20px;
+border:none;
+border-radius:10px;
+background:#1e293b;
+color:white;
+font-family:'JetBrains Mono',monospace;
+cursor:pointer;
+}
+
+hr{
+border:1px solid #1e293b;
+margin:25px 40px;
+}
+
+.footer{
+opacity:0.6;
+font-size:13px;
+margin-bottom:20px;
+}
+
+.popup{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,0.65);
+backdrop-filter:blur(8px);
+display:flex;
+align-items:center;
+justify-content:center;
+opacity:0;
+pointer-events:none;
+transition:0.3s;
+}
+
+.popup.show{
+opacity:1;
+pointer-events:auto;
+}
+
+.popup-box{
+background:#1e293b;
+padding:22px;
+border-radius:16px;
+width:230px;
+position:relative;
+transform:translateY(40px) scale(0.9);
+opacity:0;
+transition:0.35s;
+}
+
+.popup.show .popup-box{
+transform:translateY(0) scale(1);
+opacity:1;
+}
+
+.popup-box input{
+width:100%;
+padding:12px;
+border-radius:10px;
+border:none;
+margin-bottom:12px;
+font-family:'JetBrains Mono',monospace;
+font-size:14px;
+background:#0f172a;
+color:white;
+box-sizing:border-box;
+}
+
+.popup-box button{
+display:block;
+width:100%;
+margin-top:5px;
+padding:12px;
+border:none;
+border-radius:10px;
+background:#2563eb;
+color:white;
+font-family:'JetBrains Mono',monospace;
+cursor:pointer;
+}
+
+.close-popup{
+position:absolute;
+top:8px;
+right:10px;
+cursor:pointer;
+font-size:18px;
+opacity:0.7;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="header">
+<div class="title">EFDESU.MLBB</div>
+<div class="tagline">Top Up Diamond MLBB Murah & Cepat</div>
+<img src="banner.jpg" class="banner">
+</div>
+
+<div class="status">
+<div>🟢 Layanan Aktif</div>
+<div>⚡ Proses Cepat</div>
+<div>💬 Admin Online</div>
+</div>
+
+<div class="menu">
+
+<button onclick="openRegion()">TOP UP DIAMOND</button>
+
+<button onclick="goWR()">KALKULATOR WR</button>
+
+<button onclick="openCek('info')">CEK INFO AKUN</button>
+
+<button onclick="openCek('ttl')">CEK TTL AKUN</button>
+
+</div>
+
+<div class="smallmenu">
+
+<button onclick="openHistory()">RIWAYAT PESANAN</button>
+
+<button onclick="contactAdmin()">KONTAK ADMIN</button>
+
+</div>
+
+<hr>
+
+<div class="footer">
+© 2026 EFDESU.MLBB
+</div>
+
+<!-- POPUP REGION -->
+<div class="popup" id="regionPopup">
+<div class="popup-box">
+
+<div class="close-popup" onclick="closeRegion()">✕</div>
+
+<h3>Pilih Region</h3>
+
+<button onclick="goID()">🇮🇩 Indonesia</button>
+<button onclick="goBR()">🇧🇷 Brazil</button>
+
+</div>
+</div>
+
+<!-- POPUP ORDER -->
+<div class="popup" id="orderPopup">
+<div class="popup-box">
+
+<div class="close-popup" onclick="closeHistory()">✕</div>
+
+<h3>Cek Order</h3>
+
+<input id="orderID" placeholder="Masukkan Order ID">
+
+<button onclick="cekOrder()">CEK PESANAN</button>
+
+</div>
+</div>
+
+<!-- POPUP CEK AKUN -->
+<div class="popup" id="cekPopup">
+<div class="popup-box">
+
+<div class="close-popup" onclick="closeCek()">✕</div>
+
+<h3 id="cekTitle">Cek Akun</h3>
+
+<p id="cekHarga"></p>
+
+<input id="cekID" placeholder="ID Player">
+<input id="cekServer" placeholder="Server">
+
+<button onclick="kirimCek()">KLIK</button>
+
+</div>
+</div>
+
+<script>
+
+function openRegion(){
+document.getElementById("regionPopup").classList.add("show")
+}
+
+function closeRegion(){
+document.getElementById("regionPopup").classList.remove("show")
+}
+
+function goID(){
+localStorage.setItem("region","Indonesia")
+window.location.href="topup.html"
+}
+
+function goBR(){
+localStorage.setItem("region","Brazil")
+window.location.href="topup2.html"
+}
+
+function goWR(){
+window.location.href="wr.html"
+}
+
+function contactAdmin(){
+window.open("https://wa.me/6281367491916","_blank")
+}
+
+function openHistory(){
+document.getElementById("orderPopup").classList.add("show")
+}
+
+function closeHistory(){
+document.getElementById("orderPopup").classList.remove("show")
+}
+
+function cekOrder(){
+
+let id=document.getElementById("orderID").value.trim()
+
+if(id===""){
+alert("Masukkan Order ID dulu")
+return
+}
+
+window.location.href="order.html?order="+id
+
+}
+
+let cekType=""
+
+function openCek(type){
+
+cekType=type
+
+if(type==="info"){
+document.getElementById("cekTitle").innerHTML="Cek Info Akun"
+document.getElementById("cekHarga").innerHTML="Harga : Rp3.000"
+}else{
+document.getElementById("cekTitle").innerHTML="Cek TTL Akun"
+document.getElementById("cekHarga").innerHTML="Harga : Rp5.000"
+}
+
+document.getElementById("cekPopup").classList.add("show")
+
+}
+
+function closeCek(){
+document.getElementById("cekPopup").classList.remove("show")
+}
+
+function kirimCek(){
+
+let id=document.getElementById("cekID").value
+let server=document.getElementById("cekServer").value
+
+if(id==""||server==""){
+alert("Masukkan ID dan Server")
+return
+}
+
+if(isNaN(id)||isNaN(server)){
+alert("ID dan Server harus angka")
+return
+}
+
+let pesan=""
+
+if(cekType=="info"){
+pesan="Halo Admin EFDESU.MLBB%0ASaya ingin cek INFO AKUN MLBB%0A%0AID : "+id+"%0AServer : "+server+"%0AHarga : Rp3.000"
+}else{
+pesan="Halo Admin EFDESU.MLBB%0ASaya ingin cek TTL AKUN MLBB%0A%0AID : "+id+"%0AServer : "+server+"%0AHarga : Rp5.000"
+}
+
+window.open("https://wa.me/6281367491916?text="+pesan,"_blank")
+
+}
+
+</script>
+
+</body>
+</html>

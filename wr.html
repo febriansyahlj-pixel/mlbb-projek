@@ -1,0 +1,301 @@
+<!DOCTYPE html><html>
+<head><title>WR Calculator MLBB</title>
+<meta name="viewport" content="width=device-width, initial-scale=1"><link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono&display=swap" rel="stylesheet"><style>
+
+body{
+margin:0;
+font-family:'JetBrains Mono',monospace;
+color:white;
+text-align:center;
+background:linear-gradient(-45deg,#020617,#0f172a,#020617,#1e293b);
+background-size:400% 400%;
+animation:bg 12s infinite;
+}
+
+@keyframes bg{
+0%{background-position:0% 50%;}
+50%{background-position:100% 50%;}
+100%{background-position:0% 50%;}
+}
+
+.header{
+background:#020617;
+padding:16px;
+font-size:20px;
+letter-spacing:3px;
+font-weight:bold;
+}
+
+.box{
+
+background:#1e293b;
+
+width:300px;
+
+margin:40px auto;
+
+padding:25px;
+
+border-radius:16px;
+
+}
+
+.form-group{
+
+margin-bottom:16px;
+
+text-align:left;
+
+}
+
+.form-group label{
+
+font-size:13px;
+
+opacity:0.8;
+
+}
+
+.form-group input{
+
+width:100%;
+
+margin-top:6px;
+
+padding:9px;
+
+border:none;
+
+border-radius:8px;
+
+font-family:'JetBrains Mono',monospace;
+
+font-size:14px;
+
+box-sizing:border-box;
+
+}
+
+.btn{
+
+margin-top:14px;
+
+padding:10px 26px;
+
+border:none;
+
+border-radius:10px;
+
+background:#22c55e;
+
+color:white;
+
+font-family:'JetBrains Mono',monospace;
+
+font-size:14px;
+
+cursor:pointer;
+
+}
+
+.popup{
+
+position:fixed;
+
+top:0;
+
+left:0;
+
+width:100%;
+
+height:100%;
+
+background:rgba(0,0,0,0.75);
+
+backdrop-filter:blur(8px);
+
+display:flex;
+
+align-items:center;
+
+justify-content:center;
+
+z-index:9999;
+
+opacity:0;
+
+pointer-events:none;
+
+transition:0.3s;
+
+}
+
+.popup.show{
+
+opacity:1;
+
+pointer-events:auto;
+
+}
+
+.popup-box{
+
+background:#1e293b;
+
+padding:22px;
+
+border-radius:12px;
+
+width:220px;
+
+position:relative;
+
+transform:scale(0.8);
+
+transition:0.25s;
+
+}
+
+.popup.show .popup-box{
+
+transform:scale(1);
+
+}
+
+.close{
+
+position:absolute;
+
+top:6px;
+
+right:10px;
+
+font-size:20px;
+
+cursor:pointer;
+
+}
+
+.number{
+
+font-size:22px;
+
+font-weight:bold;
+
+color:#22c55e;
+
+}
+
+hr{
+
+border:1px solid #1e293b;
+
+margin:30px 40px;
+
+}
+
+.footer{
+
+opacity:0.6;
+
+font-size:12px;
+
+margin-bottom:20px;
+
+}
+
+</style></head><body><div class="header">WR CALCULATOR MLBB
+
+</div><div class="box"><div class="form-group"><label>Total Match</label>
+
+<input id="match" type="number"></div><div class="form-group"><label>Win Rate Sekarang (%)</label>
+
+<input id="wr" type="number"></div><div class="form-group"><label>Target Win Rate (%)</label>
+
+<input id="target" type="number"></div><button class="btn" onclick="hitung()">Hitung
+
+</button><br><button class="btn" onclick="beranda()">Beranda
+
+</button></div><div class="popup" id="resultPopup"><div class="popup-box"><div class="close" onclick="tutup()">✕</div><p>Butuh <span class="number" id="angka">0</span> win tanpa kalah
+
+</p></div></div><div class="popup" id="errorPopup"><div class="popup-box"><div class="close" onclick="tutupError()">✕</div><p>Harap isi semua data</p><button class="btn" onclick="tutupError()">OK</button>
+
+</div></div><hr><div class="footer">© 2026 EFDESU.MLBB
+
+</div><script>
+
+function hitung(){
+
+let match=parseFloat(document.getElementById("match").value)
+
+let wr=parseFloat(document.getElementById("wr").value)
+
+let target=parseFloat(document.getElementById("target").value)
+
+if(isNaN(match)||isNaN(wr)||isNaN(target)){
+
+document.getElementById("errorPopup").classList.add("show")
+
+return
+
+}
+
+let win=(wr/100)*match
+
+let need=0
+
+while((win+need)/(match+need)*100 < target){
+
+need++
+
+}
+
+document.getElementById("resultPopup").classList.add("show")
+
+animasi(need)
+
+}
+
+function animasi(target){
+
+let angka=document.getElementById("angka")
+
+let start=0
+
+let speed=Math.max(10,Math.floor(400/target))
+
+let interval=setInterval(()=>{
+
+start++
+
+angka.innerText=start
+
+if(start>=target){
+
+clearInterval(interval)
+
+}
+
+},speed)
+
+}
+
+function tutup(){
+
+document.getElementById("resultPopup").classList.remove("show")
+
+}
+
+function tutupError(){
+
+document.getElementById("errorPopup").classList.remove("show")
+
+}
+
+function beranda(){
+
+window.location.href="index.html"
+
+}
+
+</script></body></html>

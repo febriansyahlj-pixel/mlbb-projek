@@ -1,0 +1,183 @@
+<!DOCTYPE html><html>
+<head>
+<title>Detail Order</title>
+<meta name="viewport" content="width=device-width, initial-scale=1"><link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono&display=swap" rel="stylesheet"><style>
+
+body{
+margin:0;
+font-family:'JetBrains Mono',monospace;
+color:white;
+text-align:center;
+
+background:linear-gradient(-45deg,#020617,#0f172a,#020617,#1e293b);
+background-size:400% 400%;
+animation:bg 12s infinite;
+}
+
+@keyframes bg{
+0%{background-position:0% 50%;}
+50%{background-position:100% 50%;}
+100%{background-position:0% 50%;}
+}
+
+.header{
+background:#020617;
+padding:20px;
+font-size:24px;
+font-weight:bold;
+}
+
+.box{
+background:#1e293b;
+margin:20px;
+padding:18px;
+border-radius:14px;
+text-align:left;
+}
+
+.row{
+margin:10px 0;
+}
+
+.label{
+opacity:0.6;
+font-size:13px;
+}
+
+.value{
+font-size:16px;
+margin-top:3px;
+}
+
+.status{
+margin-top:10px;
+padding:6px 12px;
+border-radius:8px;
+display:inline-block;
+background:#f59e0b;
+}
+
+.success{
+background:#22c55e;
+}
+
+.pending{
+background:#f59e0b;
+}
+
+.btn{
+margin-top:20px;
+padding:11px 24px;
+border:none;
+border-radius:10px;
+background:#2563eb;
+color:white;
+font-family:'JetBrains Mono',monospace;
+cursor:pointer;
+}
+
+hr{
+border:1px solid #1e293b;
+margin:25px 40px;
+}
+
+.footer{
+opacity:0.6;
+font-size:13px;
+margin-bottom:20px;
+text-align:center;
+}
+
+</style></head><body><div class="header">
+DETAIL ORDER
+</div><div class="box"><div class="row">
+<div class="label">ORDER ID</div>
+<div class="value" id="order"></div>
+</div><div class="row">
+<div class="label">REGION</div>
+<div class="value" id="region"></div>
+</div><div class="row">
+<div class="label">ID GAME</div>
+<div class="value" id="idgame"></div>
+</div><div class="row">
+<div class="label">SERVER</div>
+<div class="value" id="server"></div>
+</div><div class="row">
+<div class="label">DIAMOND</div>
+<div class="value" id="diamond"></div>
+</div><div class="row">
+<div class="label">HARGA</div>
+<div class="value" id="harga"></div>
+</div><div class="row">
+<div class="label">STATUS</div>
+<div class="status pending" id="status">PENDING</div>
+</div><button class="btn" onclick="kembaliBeranda()">
+Kembali Ke Beranda
+</button></div><hr><div class="footer">
+© 2026 EFDESU.MLBB
+</div><script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script><script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script><script>
+
+const firebaseConfig = {
+apiKey: "AIzaSyBv3hvK1D8Nh9EIA8fdKQuLKtQuiCwehTM",
+authDomain: "mlbb-project-f280f.firebaseapp.com",
+projectId: "mlbb-project-f280f",
+storageBucket: "mlbb-project-f280f.firebasestorage.app",
+messagingSenderId: "505986844749",
+appId: "1:505986844749:web:c7aebe40556642a9b5f404"
+};
+
+firebase.initializeApp(firebaseConfig)
+const db=firebase.firestore()
+
+function rupiah(x){
+return "Rp "+x.toString().replace(/\B(?=(\d{3})+(?!\d))/g,".")
+}
+
+let params=new URLSearchParams(window.location.search)
+let orderID=params.get("order")
+
+document.getElementById("order").innerHTML=orderID
+
+function loadOrder(){
+
+db.collection("orders").doc(orderID).get().then(doc=>{
+
+if(!doc.exists){
+alert("Order tidak ditemukan")
+return
+}
+
+let data=doc.data()
+
+document.getElementById("region").innerHTML=data.region
+document.getElementById("idgame").innerHTML=data.id
+document.getElementById("server").innerHTML=data.server
+document.getElementById("diamond").innerHTML=data.diamond+" 💎"
+document.getElementById("harga").innerHTML=rupiah(data.harga)
+
+let status=data.status
+let statusBox=document.getElementById("status")
+
+statusBox.innerHTML=status
+
+if(status=="SUCCESS"){
+statusBox.classList.remove("pending")
+statusBox.classList.add("success")
+}
+
+})
+
+}
+
+loadOrder()
+
+setInterval(loadOrder,5000)
+
+function kembaliBeranda(){
+
+window.location.replace("index.html")
+
+}
+
+</script></body>
+</html>
