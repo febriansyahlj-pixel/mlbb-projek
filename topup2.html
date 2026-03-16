@@ -286,8 +286,6 @@ waktu:new Date()
 
 .then(()=>{
 
-/* NOTIF TELEGRAM */
-
 let pesan=`🔔 ORDER BARU
 
 Order : ${order}
@@ -295,7 +293,10 @@ Region : ${region}
 ID : ${id} (${server})
 Diamond : ${diamond}
 Harga : ${harga}
-Status : PENDING`
+Status : PENDING
+
+SELESAIKAN:
+https://febriansyahlj-pixel.github.io/mlbb-projek/admin.html?done=${order}`
 
 fetch("https://api.telegram.org/bot8715240228:AAFf6DsDe3Njd71FZXkmmZGgVEGe1VFSMTA/sendMessage",{
 method:"POST",
