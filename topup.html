@@ -1,12 +1,7 @@
-<!DOCTYPE html>
-<html>
+<!DOCTYPE html><html>
 <head>
 <title>Top Up MLBB Indonesia</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-
-<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono&display=swap" rel="stylesheet">
-
-<style>
+<meta name="viewport" content="width=device-width, initial-scale=1"><link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono&display=swap" rel="stylesheet"><style>
 
 body{
 margin:0;
@@ -107,24 +102,53 @@ pointer-events:auto;
 
 .popup-box{
 background:#1e293b;
-padding:16px;
+padding:18px 16px 16px 16px;
 border-radius:14px;
-width:230px;
+width:210px;
 position:relative;
 }
 
 .popup img{
-width:170px;
+width:140px;
 border-radius:10px;
 margin-top:6px;
 }
 
 .close{
 position:absolute;
-top:6px;
+top:8px;
 right:10px;
-font-size:22px;
+font-size:18px;
 cursor:pointer;
+opacity:0.7;
+}
+
+.close:hover{
+opacity:1;
+}
+
+.total-box{
+margin-top:10px;
+background:#0f172a;
+padding:10px;
+border-radius:10px;
+}
+
+.total-row{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-top:6px;
+}
+
+.copy{
+background:#2563eb;
+border:none;
+color:white;
+padding:6px 10px;
+border-radius:6px;
+cursor:pointer;
+font-size:12px;
 }
 
 .loading{
@@ -133,36 +157,15 @@ margin-top:10px;
 opacity:0.8;
 }
 
-</style>
-</head>
-
-<body>
-
-<div class="header">
+</style></head><body><div class="header">
 TOP UP MLBB INDONESIA
-</div>
-
-<div class="box">
+</div><div class="box">
 <p id="region"></p>
-</div>
-
-<div class="box">
-<p>ID Game</p>
-
-<div class="row">
+</div><div class="box">
+<p>ID Game</p><div class="row">
 <input id="id" placeholder="ID">
 <input id="server" placeholder="Server">
-</div>
-
-</div>
-
-<div class="box">
-
-<p>Pilih Diamond</p>
-
-<div class="diamond">
-
-<button onclick="pilih(this,1000,150000)">1000 💎</button>
+</div></div><div class="box"><p>Pilih Diamond</p><div class="diamond"><button onclick="pilih(this,1000,150000)">1000 💎</button>
 <button onclick="pilih(this,2500,220000)">2500 💎</button>
 <button onclick="pilih(this,5000,400000)">5000 💎</button>
 <button onclick="pilih(this,7000,550000)">7000 💎</button>
@@ -172,42 +175,14 @@ onclick="pilih(this,10000,1100000)">
 10000 💎
 </button>
 
-</div>
-
-<p id="harga"></p>
-
-<button class="btn" onclick="bayar()">
+</div><p id="harga"></p><button class="btn" onclick="bayar()">
 Bayar
-</button>
-
-</div>
-
-<div class="popup" id="popup">
-
-<div class="popup-box">
-
-<div class="close" onclick="tutup()">✕</div>
-
-<p>Scan QRIS</p>
-
-<img src="qris.png">
-
-<br>
-
-<button class="btn" id="btnBayar" onclick="kirim()">
+</button></div><div class="popup" id="popup" onclick="outside(event)"><div class="popup-box"><div class="close" onclick="tutup()">✕</div><h3>Scan QRIS</h3><img src="kris.jpg"><div class="total-box"><p>Total Bayar</p><div class="total-row">
+<span id="totalHarga">Rp 0</span>
+<button class="copy" onclick="copyHarga()">COPY</button>
+</div></div><button class="btn" id="btnBayar" onclick="kirim()">
 Sudah Bayar
-</button>
-
-<p id="loading" class="loading"></p>
-
-</div>
-
-</div>
-
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
-
-<script>
+</button><p id="loading" class="loading"></p></div></div><script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script><script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script><script>
 
 const firebaseConfig = {
 apiKey: "AIzaSyB...",
@@ -238,6 +213,7 @@ diamond=d
 harga=h
 
 document.getElementById("harga").innerHTML=rupiah(h)
+document.getElementById("totalHarga").innerText=rupiah(h)
 
 document.querySelectorAll(".diamond button").forEach(b=>{
 b.classList.remove("selected")
@@ -268,8 +244,20 @@ document.getElementById("popup").classList.add("show")
 
 }
 
+function copyHarga(){
+let text=document.getElementById("totalHarga").innerText
+navigator.clipboard.writeText(text)
+alert("Harga disalin: "+text)
+}
+
 function tutup(){
 document.getElementById("popup").classList.remove("show")
+}
+
+function outside(e){
+if(e.target.id==="popup"){
+tutup()
+}
 }
 
 let kirimKlik=false
@@ -331,7 +319,5 @@ window.location.href="order.html?order="+order
 
 }
 
-</script>
-
-</body>
+</script></body>
 </html>
