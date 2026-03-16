@@ -33,6 +33,24 @@ padding:16px;
 border-radius:14px;
 }
 
+.notice{
+background:#0f172a;
+margin:12px 20px;
+padding:14px;
+border-radius:12px;
+font-size:12px;
+opacity:0.9;
+line-height:1.6;
+}
+
+.footer{
+margin-top:10px;
+padding:20px;
+font-size:12px;
+opacity:0.7;
+border-top:1px solid #334155;
+}
+
 .row{
 display:flex;
 gap:10px;
@@ -171,7 +189,8 @@ TOP UP MLBB INDONESIA
 <p>ID Game</p><div class="row">
 <input id="id" placeholder="ID">
 <input id="server" placeholder="Server">
-</div></div><div class="box"><p>Pilih Diamond</p><div class="diamond"><button onclick="pilih(this,1000,150000)">1000 💎</button>
+</div>
+</div><div class="box"><p>Pilih Diamond</p><div class="diamond"><button onclick="pilih(this,1000,150000)">1000 💎</button>
 <button onclick="pilih(this,2500,220000)">2500 💎</button>
 <button onclick="pilih(this,5000,400000)">5000 💎</button>
 <button onclick="pilih(this,7000,550000)">7000 💎</button>
@@ -183,12 +202,28 @@ onclick="pilih(this,10000,1100000)">
 
 </div><p id="harga"></p><button class="btn" onclick="bayar()">
 Bayar
-</button></div><div class="popup" id="popup" onclick="outside(event)"><div class="popup-box"><div class="close" onclick="tutup()">✕</div><h3>Scan QRIS</h3><img src="kris.jpg"><div class="total-box"><p>Total Bayar</p><div class="total-row">
+</button></div><div class="notice">Pemberitahuan,<br><br>
+
+Untuk Region Indonesia ini adalah hanya demo sementara.
+Saat ini kami hanya menyediakan Top Up untuk Server Brazil.<br><br>
+
+Terimakasih atas perhatiannya.<br><br>
+
+Hormat saya,<br>
+Febriyansah (Owner)
+
+</div><div class="footer">
+© 2026 EFDESU.MLBB
+</div><!-- POPUP QRIS --><div class="popup" id="popup" onclick="outside(event)"><div class="popup-box"><div class="close" onclick="tutup()">✕</div><h3>Scan QRIS</h3><img src="kris.jpg"><div class="total-box"><p>Total Bayar</p><div class="total-row">
 <span id="totalHarga">Rp 0</span>
 <button class="copy" onclick="copyHarga()">COPY</button>
 </div></div><button class="btn" id="btnBayar" onclick="kirim()">
 Sudah Bayar
-</button><p id="loading" class="loading"></p></div></div><script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script><script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script><script>
+</button><p id="loading" class="loading"></p></div>
+</div><!-- POPUP ALERT --><div class="popup" id="alertPopup" onclick="tutupAlert()"><div class="popup-box"><h3 id="alertText">Pesan</h3><button class="btn" onclick="tutupAlert()">
+OK
+</button></div>
+</div><script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script><script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script><script>
 
 const firebaseConfig = {
 apiKey: "AIzaSyB...",
@@ -211,6 +246,15 @@ document.getElementById("region").innerHTML="Region : "+region
 
 function rupiah(x){
 return "Rp "+x.toString().replace(/\B(?=(\d{3})+(?!\d))/g,".")
+}
+
+function showAlert(text){
+document.getElementById("alertText").innerText=text
+document.getElementById("alertPopup").classList.add("show")
+}
+
+function tutupAlert(){
+document.getElementById("alertPopup").classList.remove("show")
 }
 
 function pilih(el,d,h){
@@ -237,12 +281,12 @@ let server=document.getElementById("server").value
 let angka=/^[0-9]+$/
 
 if(id==""||server==""||!angka.test(id)||!angka.test(server)){
-alert("Harap Input ID & Server Yang Benar")
+showAlert("Harap Input ID & Server Yang Benar")
 return
 }
 
 if(diamond==0){
-alert("Pilih diamond dulu")
+showAlert("Pilih diamond dulu")
 return
 }
 
@@ -253,7 +297,7 @@ document.getElementById("popup").classList.add("show")
 function copyHarga(){
 let text=document.getElementById("totalHarga").innerText
 navigator.clipboard.writeText(text)
-alert("Harga disalin: "+text)
+showAlert("Harga disalin: "+text)
 }
 
 function tutup(){
