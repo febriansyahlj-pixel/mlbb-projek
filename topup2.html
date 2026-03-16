@@ -1,5 +1,4 @@
-<!DOCTYPE html><html>
-<head>
+<!DOCTYPE html><html><head>
 <title>Top Up MLBB Brazil</title>
 <meta name="viewport" content="width=device-width, initial-scale=1"><link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono&display=swap" rel="stylesheet"><style>
 
@@ -97,6 +96,14 @@ background:#22c55e;
 color:white;
 font-family:'JetBrains Mono',monospace;
 cursor:pointer;
+}
+
+.footer{
+margin-top:30px;
+padding:20px;
+font-size:12px;
+opacity:0.7;
+border-top:1px solid #334155;
 }
 
 .popup{
@@ -199,16 +206,23 @@ TOP UP MLBB BRAZIL
 <button onclick="pilih(this,5532,1218600)">5532 💎<span>Rp 1.218.600</span></button>
 <button onclick="pilih(this,12976,2823300)">12976 💎<span>Rp 2.823.300</span></button>
 <button onclick="pilih(this,18576,4045500)">18576 💎<span>Rp 4.045.500</span></button>
-<button style="grid-column:1/3" onclick="pilih(this,27864,6112500)">27864 💎<span>Rp 6.112.500</span></button>
 
-</div><p id="harga"></p><button class="btn" onclick="bayar()">Bayar</button>
+<button style="grid-column:1/3" onclick="pilih(this,27864,6112500)">
+27864 💎<span>Rp 6.112.500</span>
+</button></div><p id="harga"></p><button class="btn" onclick="bayar()">Bayar</button>
 
-</div><div class="popup" id="popup" onclick="outside(event)"><div class="popup-box"><div class="close" onclick="tutup()">✕</div><h3>Scan QRIS</h3><img src="kris.jpg"><div class="total-box"><p>Total Bayar</p><div class="total-row">
+</div><div class="footer">
+© 2026 EFDESU.MLBB
+</div><!-- POPUP QRIS --><div class="popup" id="popup" onclick="outside(event)"><div class="popup-box"><div class="close" onclick="tutup()">✕</div><h3>Scan QRIS</h3><img src="kris.jpg"><div class="total-box"><p>Total Bayar</p><div class="total-row">
 <span id="totalHarga">Rp 0</span>
 <button class="copy" onclick="copyHarga()">COPY</button>
 </div></div><button class="btn" id="btnBayar" onclick="kirim()">
 Sudah Bayar
-</button><p id="loading" class="loading"></p></div></div><script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script><script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script><script>
+</button><p id="loading" class="loading"></p></div>
+</div><!-- POPUP ALERT --><div class="popup" id="alertPopup" onclick="tutupAlert()"><div class="popup-box"><h3 id="alertText">Pesan</h3><button class="btn" onclick="tutupAlert()">
+OK
+</button></div>
+</div><script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script><script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script><script>
 
 const firebaseConfig = {
 apiKey:"AIzaSyB...",
@@ -231,6 +245,15 @@ document.getElementById("region").innerHTML="Region : "+region
 
 function rupiah(x){
 return "Rp "+x.toString().replace(/\B(?=(\d{3})+(?!\d))/g,".")
+}
+
+function showAlert(text){
+document.getElementById("alertText").innerText=text
+document.getElementById("alertPopup").classList.add("show")
+}
+
+function tutupAlert(){
+document.getElementById("alertPopup").classList.remove("show")
 }
 
 function pilih(el,d,h){
@@ -257,12 +280,12 @@ let server=document.getElementById("server").value
 let angka=/^[0-9]+$/
 
 if(id==""||server==""||!angka.test(id)||!angka.test(server)){
-alert("Harap Input ID & Server Yang Benar")
+showAlert("Harap Input ID & Server Yang Benar")
 return
 }
 
 if(diamond==0){
-alert("Pilih diamond dulu")
+showAlert("Pilih diamond dulu")
 return
 }
 
@@ -273,7 +296,7 @@ document.getElementById("popup").classList.add("show")
 function copyHarga(){
 let text=document.getElementById("totalHarga").innerText
 navigator.clipboard.writeText(text)
-alert("Harga disalin: "+text)
+showAlert("Harga disalin: "+text)
 }
 
 function tutup(){
