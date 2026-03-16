@@ -135,6 +135,14 @@ firebase.initializeApp(firebaseConfig)
 
 const db = firebase.firestore()
 
+let autoDone = null
+
+
+/* CEK LINK TELEGRAM */
+
+const urlParams = new URLSearchParams(window.location.search)
+autoDone = urlParams.get("done")
+
 
 function login(){
 
@@ -146,6 +154,23 @@ document.getElementById("loginBox").style.display="none"
 document.getElementById("panel").style.display="block"
 
 loadOrders()
+
+/* AUTO SELESAI DARI TELEGRAM */
+
+if(autoDone){
+
+db.collection("orders")
+.doc(autoDone)
+.update({
+status:"SELESAI"
+})
+.then(()=>{
+
+alert("Order "+autoDone+" berhasil diselesaikan")
+
+})
+
+}
 
 }else{
 
